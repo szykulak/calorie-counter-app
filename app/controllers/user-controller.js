@@ -50,7 +50,7 @@ exports.update = (req, res) => { //put
         weight: req.body.weight || "-",
         height: req.body.height || "-",
         age: req.body.age || "-",
-        intake: req.body.intake || "-"
+        intake: req.body.intake || "-" //podst dane do wzoru w zaleznosci od plci
     }, {new: true})
         .then(user => {
             if (!user) {
@@ -92,13 +92,14 @@ exports.delete = (req, res) => {
     });
 
 };
+
 exports.login = (req,res)=>{
     const username = req.body.username
     const user = {name: username}
     const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
     res.json({accessToken: accessToken})
 };
-function authenticateToken(req, res, next) { //validate the user //zwraca dane dla danego usera //jak to wykorzytac
+exports.authenticateToken=(req, res, next)=> { //validate the user //zwraca dane dla danego usera //jak to wykorzytac
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1] //bo między bearer a token jest spacja a my chcemy token czyli 2. el tablicy, jak nie ma headeru zwroc undefined
     if (token == null) return res.sendStatus(401)
@@ -107,7 +108,7 @@ function authenticateToken(req, res, next) { //validate the user //zwraca dane d
         req.user = user
         next()
     })
-}
+};
 
 
 //czyli tu chyba jakas metodke calculate intake i wywolywac w pucie

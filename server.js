@@ -29,6 +29,7 @@ app.get('/', (req, res) => {
 require('./app/routes/exercise-route.js')(app);
 require('./app/routes/food-route.js')(app);
 require('./app/routes/user-route.js')(app);
+require('./app/routes/summary-route.js')(app);
 
 
 app.listen(3000, () => {
