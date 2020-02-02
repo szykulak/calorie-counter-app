@@ -7,5 +7,6 @@ const summarySchema = mongoose.Schema({
     fatConsumed: Number,
     caloriesBurned: Number,
     totalEnergyBalance: Number
+
 });
 module.exports=mongoose.model('Summary', summarySchema);

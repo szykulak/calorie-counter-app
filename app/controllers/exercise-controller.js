@@ -107,8 +107,8 @@ exports.delete = (req, res) => {
                 message: "Exercise with id " + req.params.exerciseId + " not found"
             });
         }
-        return res.status(500).send({
-            message: "Unknown error occurred while deleting exercise with id " + req.params.exerciseId
+        return res.status(403).send({
+            message: "Cannot delete exercise. " + req.params.exerciseId
         });
     });
 };

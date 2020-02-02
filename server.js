@@ -22,7 +22,6 @@ mongoose.connect(dbConfig.url, {
     process.exit();
 });
 
-
 app.get('/', (req, res) => {
     res.json({"message": "Welcome to Calorie Counter application!"});
 });
@@ -30,7 +29,6 @@ require('./app/routes/exercise-route.js')(app);
 require('./app/routes/food-route.js')(app);
 require('./app/routes/user-route.js')(app);
 require('./app/routes/summary-route.js')(app);
-
 
 app.listen(3000, () => {
     console.log("Server is listening on port 3000");

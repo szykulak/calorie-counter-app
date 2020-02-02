@@ -10,6 +10,7 @@ exports.getSummary = (req, res) => {
         let burnedCaloriesSum=0;
         for (var i = 0; i < foodArrayRes.body.length; i++) {
             if (typeof foodArrayRes.body[i].calories != "undefined" && typeof foodArrayRes.body[i].protein != "undefined" && typeof foodArrayRes.body[i].carbs != "undefined" && typeof foodArrayRes.body[i].fat != "undefined") {
+
                 calorieSum += foodArrayRes.body[i].calories;
                 proteinSum += foodArrayRes.body[i].protein;
                 carbsSum += foodArrayRes.body[i].carbs;
@@ -38,11 +39,10 @@ exports.getSummary = (req, res) => {
                     res.send(summary);
                 }).catch(err => {
                 res.status(500).send({
-                    message: err.message || "Unknown error occurred while creating Food."
+                    message: err.message || "Unknown error occurred while creating summary."
                 });
             });
         });
-
 
     });
 

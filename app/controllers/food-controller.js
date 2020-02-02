@@ -3,6 +3,11 @@ const unirest = require('unirest');
 
 
 exports.create = (req, res) => { //post
+    if(!req.body.name){
+        return res.status(400).send({
+            message: "Request body cannot be empty!"
+        });
+    }
     var searchReq = unirest("GET", "https://edamam-edamam-nutrition-analysis.p.rapidapi.com/api/nutrition-data");
     searchReq.query({
         ingr: req.body.name
@@ -14,14 +19,12 @@ exports.create = (req, res) => { //post
 
     searchReq.end(function (searchRes) {
         if (searchRes.error) throw new Error(searchRes.error);
-        console.log(searchRes.body.calories)
-
         const food = new Food({
-            name: req.body.name || "New meal",
-            calories: searchRes.body.calories || "0",
-            protein: searchRes.body.totalNutrients.PROCNT.quantity || "0",
-            fat: searchRes.body.totalNutrients.FAT.quantity || "0",
-            carbs: searchRes.body.totalNutrients.CHOCDF.quantity || "0"
+            name: req.body.name,
+            calories: searchRes.body.calories,
+            protein: searchRes.body.totalNutrients.PROCNT.quantity,
+            fat: searchRes.body.totalNutrients.FAT.quantity,
+            carbs: searchRes.body.totalNutrients.CHOCDF.quantity
 
         });
         food.save()
@@ -40,7 +43,7 @@ exports.create = (req, res) => { //post
 exports.findAll = (req, res) => { //get
     Food.find()
         .then(food => {
-            res.send(food);
+            res.send(food); //?.filter(food=>food.name===req.body.name)
         }).catch(err => {
         res.status(500).send({
             message: err.message || "Unknown error occurred while retrieving Food list."
@@ -49,6 +52,11 @@ exports.findAll = (req, res) => { //get
 };
 
 exports.update = (req, res) => { //put
+    if(!req.body.name){
+        return res.status(400).send({
+            message: "Cannot PUT with empty request body!"
+        });
+    }
     var searchReq = unirest("GET", "https://edamam-edamam-nutrition-analysis.p.rapidapi.com/api/nutrition-data");
     searchReq.query({
         ingr: req.body.name
@@ -60,8 +68,6 @@ exports.update = (req, res) => { //put
 
     searchReq.end(function (searchRes) {
         if (searchRes.error) throw new Error(searchRes.error);
-        //console.log(searchRes.body.calories)
-
         Food.findByIdAndUpdate(req.params.foodId, {
             name: req.body.name,
             calories: searchRes.body.calories,
@@ -105,8 +111,8 @@ exports.delete = (req, res) => {
                 message: "Food with id " + req.params.foodId + " not found"
             });
         }
-        return res.status(500).send({
-            message: "Unknown error occurred while deleting food with id " + req.params.foodId
+        return res.status(403).send({
+            message: "Cannot delete food" + req.params.foodId
         });
     });
 
