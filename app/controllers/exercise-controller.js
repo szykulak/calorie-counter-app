@@ -1,34 +1,48 @@
 const Exercise = require('../models/exercise-model.js');
+const unirest = require('unirest');
 
 //post
 exports.create = (req, res) => {
-if(!req.body.name || !req.body.burnedCalories) {
+    if (!req.body.name) {
         return res.status(400).send({
-            message: "Invalid or empty request."
+            message: "Please enter activity name!"
         });
     }
-     const exercise = new Exercise({
-            name: req.body.name || "New Exercise",
-            burnedCalories: req.body.burnedCalories
+    unirest.post('https://trackapi.nutritionix.com/v2/natural/exercise')
+        .headers({
+            "x-app-id": "85b47349",
+            "x-app-key": "b0b2a471b375356d19e25a9e264da117",
+            "Content-Type": "application/json"
+        })
+        .send({
+            query: req.body.name,
+        })
+        .then((searchRes) => {
 
+            const exercise = new Exercise({
+                name: searchRes.body.exercises[0].name,
+                burnedCalories: searchRes.body.exercises[0].nf_calories
+
+            });
+            exercise.save() //jeśli request jest poprawny to zapisujemy dane do bazy
+                .then(data => {
+                    res.send(data);
+                }).catch(err => {
+                res.status(500).send({
+                    message: err.message || "Unknown error occurred while creating Exercise."
+                });
+            });
         });
-    exercise.save() //jeśli request jest poprawny to zapisujemy dane do bazy
-        .then(data => {
-            res.send(data);
-        }).catch(err => {
-            res.status(500).send({
-            message: err.message || "Unknown error occurred while creating Exercise."
-        });
-    });
+
 
 };
 
 //get
 exports.findAll = (req, res) => {
- Exercise.find()
-    .then(exercises => {
-        res.send(exercises);
-    }).catch(err => {
+    Exercise.find()
+        .then(exercises => {
+            res.send(exercises);
+        }).catch(err => {
         res.status(500).send({
             message: err.message || "Unknown error occurred while retrieving Exercises."
         });
@@ -37,53 +51,64 @@ exports.findAll = (req, res) => {
 
 //put
 exports.update = (req, res) => {
- if(!req.body.name || !req.body.burnedCalories) {
-         return res.status(400).send({
-             message: "Invalid or empty request."
-         });
-     }
+    if (!req.body.name) {
+        return res.status(400).send({
+            message: "Please enter activity name!"
+        });
+    }
+    unirest.post('https://trackapi.nutritionix.com/v2/natural/exercise')
+        .headers({
+            "x-app-id": "85b47349",
+            "x-app-key": "b0b2a471b375356d19e25a9e264da117",
+            "Content-Type": "application/json"
+        })
+        .send({
+            query: req.body.name,
+        }).then((searchRes) => {
+        Exercise.findByIdAndUpdate(req.params.exerciseId, {
+            name: searchRes.body.exercises[0].name,
+            burnedCalories: searchRes.body.exercises[0].nf_calories
+        }, {new: true}) //used to return the modified document to the then() function instead of the original.
+            .then(exercise => {
+                if (!exercise) {
+                    return res.status(404).send({
+                        message: "Exercise with id " + req.params.exerciseId + " not found"
+                    });
+                }
+                res.send(exercise);
+            }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                return res.status(404).send({
+                    message: "Exercise with id " + req.params.exerciseId + " not found"
+                });
+            }
+            return res.status(500).send({
+                message: "Error updating exercise with id " + req.params.exerciseId
+            });
+        });
+    });
 
-     Exercise.findByIdAndUpdate(req.params.exerciseId, {
-         name: req.body.name || "New Exercise",
-         burnedCalories: req.body.burnedCalories
-     }, {new: true}) //used to return the modified document to the then() function instead of the original.
-     .then(exercise => {
-         if(!exercise) {
-             return res.status(404).send({
-                 message: "Exercise with id " + req.params.exerciseId + " not found"
-             });
-         }
-         res.send(exercise);
-     }).catch(err => {
-         if(err.kind === 'ObjectId') {
-             return res.status(404).send({
-                 message: "Exercise with id " + req.params.exerciseId + " not found"
-             });
-         }
-         return res.status(500).send({
-             message: "Error updating exercise with id " + req.params.exerciseId
-         });
-     });
+
 };
 
 //delete
 exports.delete = (req, res) => {
- Exercise.findByIdAndRemove(req.params.exerciseId)
-    .then(exercise => {
-        if(!exercise) {
+    Exercise.findByIdAndRemove(req.params.exerciseId)
+        .then(exercise => {
+            if (!exercise) {
+                return res.status(404).send({
+                    message: "Exercise with id " + req.params.exerciseId + " not found"
+                });
+            }
+            res.status(200).send({message: "Exercise deleted successfully!"});
+        }).catch(err => {
+        if (err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
                 message: "Exercise with id " + req.params.exerciseId + " not found"
             });
         }
-        res.status(200).send({message: "Exercise deleted successfully!"});
-    }).catch(err => {
-        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-            return res.status(404).send({
-                message:  "Exercise with id " + req.params.exerciseId + " not found"
-            });
-        }
         return res.status(500).send({
-            message: "Unknown error occurred while deleting exercise with id "+ req.params.exerciseId
+            message: "Unknown error occurred while deleting exercise with id " + req.params.exerciseId
         });
     });
 };

@@ -60,7 +60,7 @@ exports.update = (req, res) => { //put
 
     searchReq.end(function (searchRes) {
         if (searchRes.error) throw new Error(searchRes.error);
-        console.log(searchRes.body.calories)
+        //console.log(searchRes.body.calories)
 
         Food.findByIdAndUpdate(req.params.foodId, {
             name: req.body.name,
