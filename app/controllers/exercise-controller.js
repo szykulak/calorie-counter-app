@@ -10,7 +10,7 @@ if(!req.body.name || !req.body.burnedCalories) {
      const exercise = new Exercise({
             name: req.body.name || "New Exercise",
             burnedCalories: req.body.burnedCalories
-            //todo tutaj robić wyszukiwanie? chyba trzeba to robić query stringiem
+
         });
     exercise.save() //jeśli request jest poprawny to zapisujemy dane do bazy
         .then(data => {
