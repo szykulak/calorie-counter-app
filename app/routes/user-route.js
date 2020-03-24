@@ -1,19 +1,11 @@
 module.exports = (app) => {
     const user = require('../controllers/user-controller.js');
-    const jwt = require('jsonwebtoken')
-    require('dotenv').config()
+    const auth = require('../controllers/auth-controller');
 
-    app.post('/user', user.create);
+    app.get('/user', auth.verifyToken, user.findAll);
 
-    app.get('/user', user.findAll);
+    app.put('/user/:userId', auth.verifyToken, user.update);
 
-    app.put('/user/:userId', user.update);
-
-    app.delete('/user/:userId', user.delete);
-
-    app.post('/user/login', user.login);
-
-
-
+    app.delete('/user/:userId', auth.verifyToken, user.delete);
 
 };

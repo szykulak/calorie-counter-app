@@ -11,7 +11,7 @@ exports.create = (req, res) => {
     unirest.post('https://trackapi.nutritionix.com/v2/natural/exercise')
         .headers({
             "x-app-id": "85b47349",
-            "x-app-key": "b0b2a471b375356d19e25a9e264da117",
+            "x-app-key": process.env.NUTRITIONIX_API_KEY,
             "Content-Type": "application/json"
         })
         .send({
@@ -59,7 +59,7 @@ exports.update = (req, res) => {
     unirest.post('https://trackapi.nutritionix.com/v2/natural/exercise')
         .headers({
             "x-app-id": "85b47349",
-            "x-app-key": "b0b2a471b375356d19e25a9e264da117",
+            "x-app-key": process.env.NUTRITIONIX_API_KEY,
             "Content-Type": "application/json"
         })
         .send({

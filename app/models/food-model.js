@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const foodSchema = mongoose.Schema({
+
     name: String,
     calories: Number,
     protein: Number,

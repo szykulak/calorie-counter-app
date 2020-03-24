@@ -1,15 +1,14 @@
 module.exports = (app) => {
     const food = require('../controllers/food-controller.js');
-    const user =require('../controllers/user-controller.js');
-    const jwt = require('jsonwebtoken')
-    require('dotenv').config()
+    const auth = require('../controllers/auth-controller');
 
-    app.post('/food', food.create);
+    app.post('/food', auth.verifyToken,food.create);
 
-    app.get('/food', food.findAll);
+    app.get('/food',auth.verifyToken, food.findAll);
 
-    app.put('/food/:foodId', food.update);
+    app.put('/food/:foodId', auth.verifyToken,food.update);
 
-    app.delete('/food/:foodId', food.delete);
+    app.delete('/food/:foodId', auth.verifyToken,food.delete);
+
 
 };

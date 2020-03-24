@@ -14,7 +14,7 @@ exports.create = (req, res) => { //post
     });
     searchReq.headers({
         "x-rapidapi-host": "edamam-edamam-nutrition-analysis.p.rapidapi.com",
-        "x-rapidapi-key": "60a01974afmsh597ca1108d5a523p175d55jsn5c81f37d6c19" //todo wczytac z pliku?
+        "x-rapidapi-key": process.env.EDAMAM_API_KEY
     });
 
     searchReq.end(function (searchRes) {
@@ -43,7 +43,7 @@ exports.create = (req, res) => { //post
 exports.findAll = (req, res) => { //get
     Food.find()
         .then(food => {
-            res.send(food); //?.filter(food=>food.name===req.body.name)
+            res.send(food);
         }).catch(err => {
         res.status(500).send({
             message: err.message || "Unknown error occurred while retrieving Food list."
@@ -63,7 +63,7 @@ exports.update = (req, res) => { //put
     });
     searchReq.headers({
         "x-rapidapi-host": "edamam-edamam-nutrition-analysis.p.rapidapi.com",
-        "x-rapidapi-key": "60a01974afmsh597ca1108d5a523p175d55jsn5c81f37d6c19" //todo wczytac z pliku?
+        "x-rapidapi-key": process.env.EDAMAM_API_KEY
     });
 
     searchReq.end(function (searchRes) {

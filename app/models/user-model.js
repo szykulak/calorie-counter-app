@@ -1,9 +1,27 @@
 const mongoose = require('mongoose')
 
-const userSchema = mongoose.Schema({
-    username: {
+const userSchema = new mongoose.Schema({
+    name: {
         type: String,
-        unique: true
+        required: 'Please enter your name',
+        min: 6,
+        max: 255
+    },
+    email: {
+        type: String,
+      required: 'Please enter your email',
+        min: 6,
+        max: 255
+    },
+    password: {
+        type: String,
+      required:'Please enter your password',
+        min: 6,
+        max: 1024
+    },
+    date: {
+        type: Date,
+        default: Date.now
     },
     gender: String,
     weight: {
@@ -21,4 +39,4 @@ const userSchema = mongoose.Schema({
     intake: Number
 
 });
-module.exports=mongoose.model('User', userSchema);
+module.exports=User=mongoose.model('User', userSchema);

@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
+app.use(express.json());
 
 const dbConfig = require('./config/database-config.js');
 const mongoose = require('mongoose');
@@ -29,6 +29,7 @@ require('./app/routes/exercise-route.js')(app);
 require('./app/routes/food-route.js')(app);
 require('./app/routes/user-route.js')(app);
 require('./app/routes/summary-route.js')(app);
+require('./app/routes/auth-route.js')(app);
 
 app.listen(3000, () => {
     console.log("Server is listening on port 3000");

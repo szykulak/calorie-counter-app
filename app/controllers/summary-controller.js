@@ -9,7 +9,8 @@ exports.getSummary = (req, res) => {
         let calorieSum = 0, proteinSum = 0, carbsSum = 0, fatSum = 0;
         let burnedCaloriesSum=0;
         for (var i = 0; i < foodArrayRes.body.length; i++) {
-            if (typeof foodArrayRes.body[i].calories != "undefined" && typeof foodArrayRes.body[i].protein != "undefined" && typeof foodArrayRes.body[i].carbs != "undefined" && typeof foodArrayRes.body[i].fat != "undefined") {
+            if (typeof foodArrayRes.body[i].calories != "undefined" && typeof foodArrayRes.body[i].protein != "undefined"
+                && typeof foodArrayRes.body[i].carbs != "undefined" && typeof foodArrayRes.body[i].fat != "undefined") {
 
                 calorieSum += foodArrayRes.body[i].calories;
                 proteinSum += foodArrayRes.body[i].protein;
