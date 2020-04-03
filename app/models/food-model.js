@@ -6,6 +6,10 @@ const foodSchema = mongoose.Schema({
     calories: Number,
     protein: Number,
     fat: Number,
-    carbs: Number
+    carbs: Number,
+    date: {
+        type: Date,
+        default: Date.now
+    }
 });
 module.exports=mongoose.model('Food', foodSchema);

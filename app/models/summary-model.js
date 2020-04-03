@@ -7,7 +7,11 @@ const summarySchema = mongoose.Schema({
     carbsConsumed: Number,
     fatConsumed: Number,
     caloriesBurned: Number,
-    totalEnergyBalance: Number
+    totalEnergyBalance: Number,
+    date: {
+        type: Date,
+        default: Date.now
+    }
 
 });
 module.exports=mongoose.model('Summary', summarySchema);
