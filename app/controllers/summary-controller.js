@@ -1,9 +1,14 @@
 const Summary = require('../models/summary-model');
+const auth = require('../controllers/auth-controller');
 const unirest = require('unirest');
 
 exports.getSummary = (req, res) => {
 
     const foodArrayReq = unirest("GET", 'http://localhost:3000/food');
+    //console.log(req.header('auth-token'));
+    foodArrayReq.headers({
+      "auth-token":  req.header('auth-token')
+    });
     foodArrayReq.end(function (foodArrayRes) {
         if (foodArrayRes.error) throw new Error(foodArrayRes.error);
         let calorieSum = 0, proteinSum = 0, carbsSum = 0, fatSum = 0;
@@ -20,6 +25,9 @@ exports.getSummary = (req, res) => {
 
         }
         const exerciseArrayReq = unirest("GET", 'http://localhost:3000/exercise')
+        exerciseArrayReq.headers({
+            "auth-token":  req.header('auth-token')
+        });
         exerciseArrayReq.end(function (exerciseArrayRes) {
             if (exerciseArrayRes.error) throw new Error(exerciseArrayRes.error);
             for(var i =0;i<exerciseArrayRes.body.length;i++){

@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 //     password:  Joi.string().min(6).required()
 //
 // }
-exports.create = async (req, res) => {
+exports.create = async (req, res) => { //register new user
     //validate
     // const validation = Joi.validate(req.body, schema);
     const emailExists = await User.findOne({email: req.body.email})
