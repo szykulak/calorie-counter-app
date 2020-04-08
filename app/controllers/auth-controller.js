@@ -44,6 +44,7 @@ exports.login = async (req, res) => {
     if (!validPassword) return res.status(400).send('Invalid password');
 try{
     const token = jwt.sign({_id: user._id}, process.env.ACCESS_TOKEN_SECRET);
+    console.log(typeof token);
     res.header('auth-token', token).send(token);
 }catch(err){
     console.log(err);
