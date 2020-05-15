@@ -11,16 +11,18 @@ exports.getSummary = (req, res) => {
     });
     foodArrayReq.end(function (foodArrayRes) {
         if (foodArrayRes.error) throw new Error(foodArrayRes.error);
+        const today = new Date().setHours(0,0,0,0);
+        const foodArrayResFiltered = foodArrayRes.body.filter(obj => new Date(obj['date']).setHours(0,0,0,0) === today);
         let calorieSum = 0, proteinSum = 0, carbsSum = 0, fatSum = 0;
         let burnedCaloriesSum=0;
-        for (var i = 0; i < foodArrayRes.body.length; i++) {
-            if (typeof foodArrayRes.body[i].calories != "undefined" && typeof foodArrayRes.body[i].protein != "undefined"
-                && typeof foodArrayRes.body[i].carbs != "undefined" && typeof foodArrayRes.body[i].fat != "undefined") {
+        for (var i = 0; i < foodArrayResFiltered.length; i++) {
+            if (typeof foodArrayResFiltered[i].calories != "undefined" && typeof foodArrayRes.body[i].protein != "undefined"
+                && typeof foodArrayResFiltered[i].carbs != "undefined" && typeof foodArrayRes.body[i].fat != "undefined") {
 
-                calorieSum += foodArrayRes.body[i].calories;
-                proteinSum += foodArrayRes.body[i].protein;
-                carbsSum += foodArrayRes.body[i].carbs;
-                fatSum += foodArrayRes.body[i].fat;
+                calorieSum += foodArrayResFiltered[i].calories;
+                proteinSum += foodArrayResFiltered[i].protein;
+                carbsSum += foodArrayResFiltered[i].carbs;
+                fatSum += foodArrayResFiltered[i].fat;
             }
 
         }
@@ -30,9 +32,11 @@ exports.getSummary = (req, res) => {
         });
         exerciseArrayReq.end(function (exerciseArrayRes) {
             if (exerciseArrayRes.error) throw new Error(exerciseArrayRes.error);
-            for(var i =0;i<exerciseArrayRes.body.length;i++){
-                if (typeof exerciseArrayRes.body[i].burnedCalories!="undefined"){
-                    burnedCaloriesSum+=exerciseArrayRes.body[i].burnedCalories;
+            const today = new Date().setHours(0,0,0,0);
+            const exerciseArrayResFiltered = exerciseArrayRes.body.filter(obj => new Date(obj['date']).setHours(0,0,0,0) === today);
+            for(var i =0;i<exerciseArrayResFiltered.length;i++){
+                if (typeof exerciseArrayResFiltered[i].burnedCalories!="undefined"){
+                    burnedCaloriesSum+=exerciseArrayResFiltered[i].burnedCalories;
                 }
             }
             const summary = new Summary({

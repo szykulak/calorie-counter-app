@@ -10,6 +10,7 @@ const foodSchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+        
     }
 });
 module.exports=mongoose.model('Food', foodSchema);
