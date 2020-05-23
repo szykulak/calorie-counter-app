@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const summarySchema = mongoose.Schema({
-
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     caloriesConsumed: Number,
     proteinConsumed: Number,
     carbsConsumed: Number,

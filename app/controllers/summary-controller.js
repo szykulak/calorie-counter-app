@@ -40,6 +40,7 @@ exports.getSummary = (req, res) => {
                 }
             }
             const summary = new Summary({
+                userId: req.user._id,
                 caloriesConsumed: calorieSum,
                 proteinConsumed: proteinSum,
                 carbsConsumed: carbsSum,

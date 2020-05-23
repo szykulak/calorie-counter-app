@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
  const exerciseSchema = mongoose.Schema({
-
+     userId: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'User'
+     },
     name: String,
     burnedCalories: Number,
      date: {

@@ -20,6 +20,7 @@ exports.create = (req, res) => { //post
     searchReq.end(function (searchRes) {
         if (searchRes.error) throw new Error(searchRes.error);
         const food = new Food({
+            userId: req.user._id,
             name: req.body.name,
             calories: searchRes.body.calories,
             protein: searchRes.body.totalNutrients.PROCNT.quantity,
@@ -41,7 +42,7 @@ exports.create = (req, res) => { //post
 };
 
 exports.findAll = (req, res) => { //get
-    Food.find()
+    Food.find({userId: req.user._id})
         .then(food => {
             res.send(food);
         }).catch(err => {

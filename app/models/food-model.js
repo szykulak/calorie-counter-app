@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
 const foodSchema = mongoose.Schema({
-
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     name: String,
     calories: Number,
     protein: Number,

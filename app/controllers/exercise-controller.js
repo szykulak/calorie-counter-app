@@ -20,6 +20,7 @@ exports.create = (req, res) => {
         .then((searchRes) => {
 
             const exercise = new Exercise({
+                userId: req.user._id,
                 name: searchRes.body.exercises[0].name,
                 burnedCalories: searchRes.body.exercises[0].nf_calories
 
@@ -39,7 +40,7 @@ exports.create = (req, res) => {
 
 //get
 exports.findAll = (req, res) => {
-    Exercise.find()
+    Exercise.find({userId: req.user._id})
         .then(exercises => {
             res.send(exercises);
         }).catch(err => {
